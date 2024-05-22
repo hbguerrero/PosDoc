@@ -1,0 +1,32 @@
+My_Lista = ["carro","casa","moto","apartamento","bicicleta","hospital"]
+My_Lista.append("helicoptero")
+My_Lista.insert(3,"autobus")
+My_Lista.extend(["bicicleta","avion"])
+My_Lista.remove("bicicleta")
+My_Lista.insert(8,"bicicleta")
+size = len(My_Lista)
+My_Lista_3 = My_Lista*3
+My_ListaSort = My_Lista.sort()
+My_NumList = [999,888,777,666,555,444,333,222,111,000]
+My_NumList.sort()
+OrdenedList = My_NumList.sort()
+My_NumList.sort(reverse = True)
+My_Tupla = tuple(My_Lista)
+
+
+#input()
+print (My_Lista)
+print (type(My_Lista))
+print (My_Lista[2])
+print ( "My_Lista size: ", len(My_Lista))
+print (My_Lista [0:2])
+print (My_Lista [:2])
+print (My_Lista.index("casa"))
+print(My_Lista.pop(size))
+print("size = ", size)
+print ("My_Lista_3 :",My_Lista_3)
+print("Sort:")
+print(My_ListaSort)
+print("ordening My_NumList: ")
+print(My_NumList.sort)
+print("De menor a mayor: ", My_NumList)
