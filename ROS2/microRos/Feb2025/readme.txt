@@ -1,6 +1,6 @@
 Initial command to verify the perfiormance of miro_ros_pub_sub.ino:
 
-From a Ubuntu 22 laptop:
+From an Ubuntu 22 laptop:
 
 source ~/ros2_ws/install/local_setup.bash 
 ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0
