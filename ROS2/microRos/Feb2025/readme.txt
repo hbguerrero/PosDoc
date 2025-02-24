@@ -4,7 +4,7 @@ From an Ubuntu 22 laptop:
 
 source ~/ros2_ws/install/local_setup.bash 
 ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB0
-//restar the board
+//restart the board
 ros2 topic list
 ros2 topic pub /xiao_led_state std_msgs/Int32 "data: 0"
 ros2 topic pub /xiao_led_state std_msgs/Int32 "data: 1"
