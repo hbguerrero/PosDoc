@@ -36,7 +36,7 @@ float ImuIni;
 
 // subscriber
 rcl_subscription_t subscriber;
-std_msgs__msg__Int32 msg_led;
+std_msgs__msg__Float32 msg_led;
 rclc_executor_t executor_sub;
 
 
@@ -69,17 +69,17 @@ void timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 
 void subscription_callback(const void *msgin)
 {
-  const std_msgs__msg__Int32 *msg_led = (const std_msgs__msg__Int32 *)msgin;
+  const std_msgs__msg__Float32 *msg_led = (const std_msgs__msg__Float32 *)msgin;
   // (condition) ? (true exec):(false exec)
   //digitalWrite(LED_PIN, (msg_led->data == 0) ? LOW : HIGH);
 
   //digitalWrite(L_PIN, (msg_led->data == 0) ? LOW : HIGH); 
 
-  if ((msg_led -> data < 5) and (msg_led -> data > 0) ) {
+  if ((msg_led -> data < 2) and (msg_led -> data > -2) ) {
     digitalWrite(L_PIN, HIGH);
     digitalWrite(R_PIN, HIGH);
   } 
-  else if ((msg_led -> data < 10) and (msg_led -> data > 5) ) {
+  else if ((msg_led -> data < -2)) {
     digitalWrite(L_PIN, HIGH);
     digitalWrite(R_PIN, LOW);
   }  
@@ -90,7 +90,7 @@ void subscription_callback(const void *msgin)
   }  
 
   // Process message
-  printf("Received: %d\n", msg_led->data);
+  //printf("Received: %d\n", msg_led->data);
 }
 
 
@@ -130,15 +130,15 @@ void setup() {
   RCCHECK(rclc_subscription_init_default(
     &subscriber,
     &node,
-    ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
-    "drone_node"));
+    ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32),
+    "u"));
 
   // create publisher
   RCCHECK(rclc_publisher_init_default(
     &publisher,
     &node,
     ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Float32),
-    "micro_ros_arduino_node_publisher"));
+    "bno"));
 
   // create timer,
   const unsigned int timer_timeout = 1;
