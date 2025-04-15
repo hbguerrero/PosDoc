@@ -30,8 +30,12 @@ unsigned long lastTime = 0;
 float ImuIni;
 
 #define LED_PIN 2
-#define L_PIN 32
-#define R_PIN 33
+
+#define L1_PIN 32
+#define R1_PIN 33
+
+#define L2_PIN 26
+#define R2_PIN 27
 
 
 // subscriber
@@ -76,17 +80,23 @@ void subscription_callback(const void *msgin)
   //digitalWrite(L_PIN, (msg_led->data == 0) ? LOW : HIGH); 
 
   if ((msg_led -> data < 2) and (msg_led -> data > -2) ) {
-    digitalWrite(L_PIN, HIGH);
-    digitalWrite(R_PIN, HIGH);
+    digitalWrite(L1_PIN, HIGH);
+    digitalWrite(R1_PIN, LOW);
+    digitalWrite(L2_PIN, HIGH);
+    digitalWrite(R2_PIN, LOW);
   } 
   else if ((msg_led -> data < -2)) {
-    digitalWrite(L_PIN, HIGH);
-    digitalWrite(R_PIN, LOW);
+    digitalWrite(L1_PIN, LOW);
+    digitalWrite(R1_PIN, HIGH);
+    digitalWrite(L2_PIN, HIGH);
+    digitalWrite(R2_PIN, LOW);
   }  
 
   else {
-    digitalWrite(L_PIN, LOW);
-    digitalWrite(R_PIN, HIGH);
+    digitalWrite(L1_PIN, HIGH);
+    digitalWrite(R1_PIN, LOW);
+    digitalWrite(L2_PIN, LOW);
+    digitalWrite(R2_PIN, HIGH);
   }  
 
   // Process message
@@ -99,12 +109,16 @@ void setup() {
   set_microros_serial_transports(Serial);
   
   pinMode(LED_PIN, OUTPUT);
-  pinMode(L_PIN, OUTPUT);
-  pinMode(R_PIN, OUTPUT);
+  pinMode(L1_PIN, OUTPUT);
+  pinMode(R1_PIN, OUTPUT);
+  pinMode(L2_PIN, OUTPUT);
+  pinMode(R2_PIN, OUTPUT);
 
   digitalWrite(LED_PIN, HIGH);
-  digitalWrite(L_PIN, LOW);
-  digitalWrite(R_PIN, LOW);  
+  digitalWrite(L1_PIN, LOW);
+  digitalWrite(R1_PIN, LOW);  
+  digitalWrite(L2_PIN, LOW);
+  digitalWrite(R2_PIN, LOW);  
   
   if(!bno.begin())
   {
