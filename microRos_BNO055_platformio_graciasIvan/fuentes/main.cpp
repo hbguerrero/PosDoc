@@ -80,23 +80,23 @@ void subscription_callback(const void *msgin)
   //digitalWrite(L_PIN, (msg_led->data == 0) ? LOW : HIGH); 
 
   if ((msg_led -> data < 2) and (msg_led -> data > -2) ) {
-    digitalWrite(L1_PIN, HIGH);
-    digitalWrite(R1_PIN, LOW);
-    digitalWrite(L2_PIN, HIGH);
-    digitalWrite(R2_PIN, LOW);
+    analogWrite(L1_PIN, 255);
+    analogWrite(R1_PIN,0);
+    analogWrite(L2_PIN, 255);
+    analogWrite(R2_PIN, 0);
   } 
   else if ((msg_led -> data < -2)) {
-    digitalWrite(L1_PIN, LOW);
-    digitalWrite(R1_PIN, HIGH);
-    digitalWrite(L2_PIN, HIGH);
-    digitalWrite(R2_PIN, LOW);
+    analogWrite(L1_PIN, (255*0.5));
+    analogWrite(R1_PIN, 0);
+    analogWrite(L2_PIN, 255);
+    analogWrite(R2_PIN, 0);
   }  
 
   else {
-    digitalWrite(L1_PIN, HIGH);
-    digitalWrite(R1_PIN, LOW);
-    digitalWrite(L2_PIN, LOW);
-    digitalWrite(R2_PIN, HIGH);
+    analogWrite(L1_PIN, 255);
+    analogWrite(R1_PIN, 0);
+    analogWrite(L2_PIN, (255*0.5));
+    analogWrite(R2_PIN, 0);
   }  
 
   // Process message
@@ -115,10 +115,10 @@ void setup() {
   pinMode(R2_PIN, OUTPUT);
 
   digitalWrite(LED_PIN, HIGH);
-  digitalWrite(L1_PIN, LOW);
-  digitalWrite(R1_PIN, LOW);  
-  digitalWrite(L2_PIN, LOW);
-  digitalWrite(R2_PIN, LOW);  
+  analogWrite(L1_PIN, 0);
+  analogWrite(R1_PIN, 0);  
+  analogWrite(L2_PIN, 0);
+  analogWrite(R2_PIN, 0);  
   
   if(!bno.begin())
   {
