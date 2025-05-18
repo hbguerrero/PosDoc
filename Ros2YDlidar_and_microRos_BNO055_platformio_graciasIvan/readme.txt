@@ -18,7 +18,7 @@ Iván creó un script que permite crear una biblioteca para su uso, se deben seg
 
 1.6 Se comparte un programa de prueba "test2.py" que se puede correr con el siguiente comando
 
-    test2.py
+    python3 test2.py
 
 ##################################################################################################################
 
