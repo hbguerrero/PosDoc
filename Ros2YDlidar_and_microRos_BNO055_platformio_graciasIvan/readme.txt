@@ -37,6 +37,12 @@ Consecuentemente:
     a) Debe descargarse el archivo de este repositorio "BNO055_Reader_Arduino_Platformio.zip" y descomprimirlo, con eso es suficiente
 
 
+#######################################################################################
+
+3.  "grados_con_propulsion.ino" direcciona el mecanismo delantero de Fabiao y diferenci las velocidades angulares de propulsión. 
+
+########################################################################################
+
 Referencias adicionales:
 
 https://www.youtube.com/watch?v=0R8VUPEkYhg&t=1804s
