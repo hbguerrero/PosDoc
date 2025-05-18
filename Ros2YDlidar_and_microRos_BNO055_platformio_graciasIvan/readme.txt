@@ -22,21 +22,29 @@ Iván creó un script que permite crear una biblioteca para su uso, se deben seg
 
 ##################################################################################################################
 
+2. AL respecto del BNO055
+
+Para el caso del bno055, para ser usado desde microRos, se desarrolló un proyecto usando platformIo configurado como ua extensión de visual studio code
+
+Consecuentemente:
+
+2.1 Se debe crear un proyecto en platformIo para el ambiente de Arduino, teniendo cuidado de seleccionar la placa esp32 correcta. Para nuesro caso ya contamos con el archivo main.cpp, este código se debe cargar en el archivo main.cpp del proyecto.
+
+2.2 El archivo platformio.ini debe contener las lineas que estan en este repositorio, en el archivo con ese mismo nombre.
+
+2.3 Para dar cumpliento a la exixtencia de la dependencia "adafruit/Adafruit BNO055@^1.6.4" en el archivo platformio.ini:
+
+    a) Debe descargarse el archivo de este repositorio "BNO055_Reader_Arduino_Platformio.zip" y descomprimirlo, con eso es suficiente
 
 
-Gracias a Iván, quien desde un princicpio me indicó usar platformio...
+Referencias adicionales:
 
-Se realizó la lectura y publicación de un BNO055 usando microRos y Ros2 humble en particular en un portatil x64 con linuc¿x ubuntu 22
+https://www.youtube.com/watch?v=0R8VUPEkYhg&t=1804s
+https://www.linkedin.com/pulse/micro-ros-esp32-ibrahim-bin-mansur-kmzwf/
 
-Inicialmente se sigió el tutorial en el siguiente enlace:  https://www.youtube.com/watch?v=0R8VUPEkYhg&t=1804s
 
-Posteriormente se decidió trabajar desde visual studio code usando platformio.
+###################################################################################################################
 
-Para configurar ros2, buscando mejorar la frecuencia de la publicación desde un esp32, se sigió el siguiente tutorial: https://www.linkedin.com/pulse/micro-ros-esp32-ibrahim-bin-mansur-kmzwf/
+Ojo: Documentar los pasos para configurar uRos y correrlo
 
-En la carpeta "fuentes" se encuentra el main.cpp y platformio.ini.
-En el platformio.ini "adafruit/Adafruit BNO055@^1.6.4" corresponde a una biblioteca que me pasó Iván. Lo demáss es del tutorial en linkedin.
-En el platformio.ini, nótese que la placa es para nuestro esp32, aa diferenia del tutorial en linkedin.
 
-En el main.cpp hay un publicante que corresponde al esp32 publicando lo de la imu.
-En el main.cpp hay un subscriptor que corresponde al esp32 recibiendo mensajes para encender unos leds.
