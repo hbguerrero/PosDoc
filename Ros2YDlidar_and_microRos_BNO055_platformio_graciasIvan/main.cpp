@@ -110,16 +110,16 @@ void subscription_callback(const void *msgin)
       analogWrite(PWM2, 0);                            
      
       if(P >= -2 && P <= 2) { 
-      analogWrite(MOTOR1, 128);
-      analogWrite(MOTOR0, 128);
+      analogWrite(MOTOR1, 64);
+      analogWrite(MOTOR0, 64);
       }
       if(P < -2) { 
-      analogWrite(MOTOR1, 64);
-      analogWrite(MOTOR0, 128);
+      analogWrite(MOTOR1, 32);
+      analogWrite(MOTOR0, 64);
       }
       if(P > 2) { 
-      analogWrite(MOTOR1, 128);
-      analogWrite(MOTOR0, 64);
+      analogWrite(MOTOR1, 64);
+      analogWrite(MOTOR0, 32);
       }     
      }
      
@@ -137,16 +137,16 @@ void subscription_callback(const void *msgin)
       }
 
       if(P >= -2 && P <= 2) { 
-      analogWrite(MOTOR1, 128);
-      analogWrite(MOTOR0, 128);
+      analogWrite(MOTOR1, 64);
+      analogWrite(MOTOR0, 64);
       }
       if(P < -2) { 
-      analogWrite(MOTOR1, 64);
-      analogWrite(MOTOR0, 128);
+      analogWrite(MOTOR1, 32);
+      analogWrite(MOTOR0, 64);
       }
       if(P > 2) { 
-      analogWrite(MOTOR1, 128);
-      analogWrite(MOTOR0, 64);
+      analogWrite(MOTOR1, 64);
+      analogWrite(MOTOR0, 32);
       }      
     }
   
