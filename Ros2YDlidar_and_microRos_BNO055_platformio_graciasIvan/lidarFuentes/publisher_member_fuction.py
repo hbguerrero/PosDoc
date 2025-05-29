@@ -1,145 +1,126 @@
-#include <Arduino.h>
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String, Int32, Float32
+
+import os
+import ydlidar
+
+import time
+import math
+
+import csv
 
 
-#define PWM_FREQ 1000
-#define PWMRESOLUTION 12
+ydlidar.os_init()
+ports = ydlidar.lidarPortList()
+port = "/dev/ydlidar"
 
-//Tomado de: https://roboticoss.com/encoder-para-robotica/
-const int C1 = 32; // Entrada de la señal A del encoder.
-const int C2 = 33; // Entrada de la señal B del encoder.
-const int PWM1 = 13;
-const int PWM2 = 12;
-const int MOTOR0 = 18; //IZQUIERDA
-const int MOTOR1 = 19; //DERECHA
+lx = 0
+sumatoria = 0
+promedio = 0
+contador = 0
+BWHP = 10
+DEG2RAD = 0.0174533
+PIMED = 1.5708
 
 
-volatile int  n    = 0;
-volatile byte ant  = 0;
-volatile byte act  = 0;
+for key, value in ports.items():
+    port = value
+laser = ydlidar.CYdLidar()
+laser.setlidaropt(ydlidar.LidarPropSerialPort, port)
+laser.setlidaropt(ydlidar.LidarPropSerialBaudrate, 128000)
+laser.setlidaropt(ydlidar.LidarPropLidarType, ydlidar.TYPE_TRIANGLE)
+laser.setlidaropt(ydlidar.LidarPropDeviceType, ydlidar.YDLIDAR_TYPE_SERIAL)
+laser.setlidaropt(ydlidar.LidarPropScanFrequency, 10.0)
+laser.setlidaropt(ydlidar.LidarPropSampleRate, 9)
+laser.setlidaropt(ydlidar.LidarPropSingleChannel, True)
 
-unsigned long lastTime = 0;  // Tiempo anterior
-unsigned long sampleTime = 10;  // Tiempo de muestreo
 
-double P = 0;
-double R = 35020;   //Parece que ppr = 11; reducción = 515; precición cuádrupla =>  R = 11*4*515
-//double R = 22660;   //Parece que ppr = 11; reducción = 515; precición cuádrupla =>  R = 11*4*515
-//double R = 1460;   //Parece que ppr = 11; reducción = 515; precición cuádrupla =>  R = 11*4*515
-double d = 0;
-double pwm =0;
-int pwm0 = 0;
+class MinimalPublisher(Node):
 
-void encoder(void);
+    def __init__(self):
+        super().__init__('minimal_publisher')
 
-void setup()
-{
-  Serial.begin(9600);
+        self.subscription = self.create_subscription(Float32, 'bno', self.listener_callback, 10)
+        self.publisher_ = self.create_publisher(Float32, 'lidar', 10)
 
-  pinMode(C1, INPUT);
-  pinMode(C2, INPUT);
-  pinMode(PWM1, OUTPUT);
-  pinMode(PWM2, OUTPUT);
-  pinMode(MOTOR0, OUTPUT);
-  pinMode(MOTOR1, OUTPUT);
+        """
+        timer_period = 0.5  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        """
+        self.i = 0.0
+        
+    def listener_callback(self, msg):
 
-  attachInterrupt(digitalPinToInterrupt(C1), encoder, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(C2), encoder, CHANGE);
-  //Serial.println("Numero de conteos");
-}
+        ret = laser.initialize()
 
-void loop() {
-  if (millis() - lastTime >= sampleTime || lastTime==0)
-  {  // Se actualiza cada sampleTime (milisegundos)
-      lastTime = millis();
-      P = (n*360.0)/R;
-      //Serial.print("Position: ");Serial.print(P);Serial.print("°; ");
-      //Serial.print("d: ");Serial.print(d);Serial.print("; ");
-      //Serial.print("pmw: ");Serial.print(pwm);Serial.println("; ");
-   }
-    
-  if (Serial.available() >0){
-    String input = Serial.readStringUntil('\n');
-    d = input.toDouble();    
-  }
-   // VALORES NEGATIVOS GIRA DERECHA, VALORS POSITIVOS GIRA IZQUIERDA
-  if (d <= 45.0 && d >=-45.0) {    
-    if (P>d){
-      analogWrite(PWM1, 0); //retrocede o derecha
-      analogWrite(PWM2, 64);
-      delay(40);
-      analogWrite(PWM1, 0);
-      analogWrite(PWM2, 0);                            
-     
-      if(P >= -2 && P <= 2) { 
-      analogWrite(MOTOR1, 128);
-      analogWrite(MOTOR0, 128);
-      }
-      if(P < -1) { 
-      analogWrite(MOTOR1, 64);
-      analogWrite(MOTOR0, 128);
-      }
-      if(P > 1) { 
-      analogWrite(MOTOR1, 128);
-      analogWrite(MOTOR0, 64);
-      }     
-     }
-     
-    else if (P<=d){      
-      if (P>d-0.7 ){
-        analogWrite(PWM1, 0); //para
-        analogWrite(PWM2, 0);
-      }
-      else{        
-        analogWrite(PWM1, 64);  //avance o izquierda
-        analogWrite(PWM2, 0);
-        delay(40);
-        analogWrite(PWM1, 0);
-        analogWrite(PWM2, 0);        
-      }
+        if ret:
+            ret = laser.turnOn()
+            scan = ydlidar.LaserScan()
+            if ret and ydlidar.os_isOk():
+                r = laser.doProcessSimple(scan)
+                sumatoria = 0
+                contador = 0.0
+                promedio = 0.0
+                
 
-      if(P >= -2 && P <= 2) { 
-      analogWrite(MOTOR1, 128);
-      analogWrite(MOTOR0, 128);
-      }
-      if(P < -2) { 
-      analogWrite(MOTOR1, 64);
-      analogWrite(MOTOR0, 128);
-      }
-      if(P > 2) { 
-      analogWrite(MOTOR1, 128);
-      analogWrite(MOTOR0, 64);
-      }      
-    }
-  
-  else {
-    analogWrite(PWM1, 0);
-    analogWrite(PWM2, 0);
-  } 
-  } 
-}
+                if msg.data == 360.0:
+                    self.rads = 0.0
+                else:
+                    self.rads = (msg.data)*math.pi/180
 
-// Encoder precisión cuádruple.
-void encoder(void)
-{
-  
-  
-  ant=act;
-  
-  if(digitalRead(C1)) bitSet(act,1); else bitClear(act,1);            
-  if(digitalRead(C2)) bitSet(act,0); else bitClear(act,0);
+                if 0 <= self.rads and self.rads < math.pi/2:
+                    self.eYaw = 0.0 - self.rads
+                elif self.rads < 2*(math.pi) and self.rads > 3*(math.pi/2):
+                    self.eYaw = 2*(math.pi) - self.rads            
 
-    if(n < R) {
-    if(ant == 2 && act ==0) n++;
-    if(ant == 0 && act ==1) n++;
-    if(ant == 3 && act ==2) n++;
-    if(ant == 1 && act ==3) n++;
-  }
-  else {n = 0;}
+                if r:
+                    with open('LidarReadings.csv', 'a') as csvfile:
+                        #writer = csv.writer(csvfile)
+                        #row = []
+                        # print("Scan received[",scan.stamp,"]:",scan.points.size(),"ranges is [",1.0/scan.config.scan_time,"]Hz");
+                        for point in scan.points:
+                           #if point.angle < ((PIMED + ((BWHP*DEG2RAD)/2)) + self.eYaw) and (point.angle > ((PIMED - ((BWHP*DEG2RAD)/2)) + self.eYaw)):
+                           if (point.angle < (2.61 + self.eYaw)) and (point.angle > (0.52 + self.eYaw)):
+                                #reading = ""
+                              if point.range > 0.0:
+                                 lx = point.range*math.cos(point.angle  - (math.pi/2 + self.eYaw))  ## Aqui SI disloca el cono, solo usu eYaw para la proyección
+                                 if (lx < 1.5):
+                                    sumatoria = sumatoria + lx
+                                    contador = contador + 1
+                                    self.i = sumatoria/contador
+                            #self.i = 0.0
+                                #reading += str(point.range)+"@"+str(point.angle)
+                                #row.append(reading)
+                        #writer.writerow(row)
+                                    #print(promedio)
+                        #             print("angle:", point.angle, " range: ", point.range)#
+                #                    print("angle:", point.angle, " lx: ", lx)
+                                    # print("angle:", point.angle, " range: ", lx)
+                #                   time.sleep(1)
+                        msg.data = self.i
+                        #print(self.i, self.eYaw)
+                        self.publisher_.publish(msg)
+                else:
+                    print("Failed to get Lidar Data")
+                time.sleep(0.05)
 
-  if(n > -R){
-    if(ant == 1 && act ==0) n--;
-  if(ant == 3 && act ==1) n--;
-  if(ant == 0 && act ==2) n--;
-  if(ant == 2 && act ==3) n--;    
-  }
-  else {n = 0;}      
-}
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    minimal_publisher = MinimalPublisher()
+
+    rclpy.spin(minimal_publisher)
+
+    # Destroy the node explicitly
+    # (optional - otherwise it will be done automatically
+    # when the garbage collector destroys the node object)
+    minimal_publisher.destroy_node()
+    rclpy.shutdown()
+    laser.turnOff()
+    laser.disconnecting()
+
+
+if __name__ == '__main__':
+    main()
