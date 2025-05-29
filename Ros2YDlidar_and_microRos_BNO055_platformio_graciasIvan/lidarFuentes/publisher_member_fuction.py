@@ -19,9 +19,10 @@ lx = 0
 sumatoria = 0
 promedio = 0
 contador = 0
-BWHP = 2
+BWHP = 10
 DEG2RAD = 0.0174533
 PIMED = 1.5708
+
 
 for key, value in ports.items():
     port = value
@@ -46,8 +47,8 @@ class MinimalPublisher(Node):
         """
         timer_period = 0.5  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.i = 0.0
         """
+        self.i = 0.0
         
     def listener_callback(self, msg):
 
@@ -61,6 +62,7 @@ class MinimalPublisher(Node):
                 sumatoria = 0
                 contador = 0.0
                 promedio = 0.0
+                
 
                 if msg.data == 360.0:
                     self.rads = 0.0
@@ -78,21 +80,21 @@ class MinimalPublisher(Node):
                         #row = []
                         # print("Scan received[",scan.stamp,"]:",scan.points.size(),"ranges is [",1.0/scan.config.scan_time,"]Hz");
                         for point in scan.points:
-                            if point.angle < ((PIMED + ((BWHP*DEG2RAD)/2)) + self.eYaw) and (point.angle > ((PIMED - ((BWHP*DEG2RAD)/2)) + self.eYaw)):
-                            #reading = ""
+                           #if point.angle < ((PIMED + ((BWHP*DEG2RAD)/2)) + self.eYaw) and (point.angle > ((PIMED - ((BWHP*DEG2RAD)/2)) + self.eYaw)):
+                           if (point.angle < (2.61 + self.eYaw)) and (point.angle > (0.52 + self.eYaw)):
+                                #reading = ""
                               if point.range > 0.0:
-                                if (point.range > 0) and (point.range < 1.0):
-                                    #lx = point.range*math.cos((point.angle - math.pi/2) + self.eYaw)  ## Aqui NO disloca el cono, solo usu eYaw para la proyección
-                                    lx = point.range*math.cos(point.angle  - (math.pi/2 + self.eYaw))  ## Aqui SI disloca el cono, solo usu eYaw para la proyección
+                                 lx = point.range*math.cos(point.angle  - (math.pi/2 + self.eYaw))  ## Aqui SI disloca el cono, solo usu eYaw para la proyección
+                                 if (lx < 1.5):
                                     sumatoria = sumatoria + lx
                                     contador = contador + 1
                                     self.i = sumatoria/contador
                             #self.i = 0.0
-                            #reading += str(point.range)+"@"+str(point.angle)
-                            #row.append(reading)
+                                #reading += str(point.range)+"@"+str(point.angle)
+                                #row.append(reading)
                         #writer.writerow(row)
                                     #print(promedio)
-                #                    print("angle:", point.angle, " range: ", point.range)#
+                        #             print("angle:", point.angle, " range: ", point.range)#
                 #                    print("angle:", point.angle, " lx: ", lx)
                                     # print("angle:", point.angle, " range: ", lx)
                 #                   time.sleep(1)
