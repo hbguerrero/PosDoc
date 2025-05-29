@@ -4,12 +4,9 @@ from std_msgs.msg import String, Int32, Float32
 
 import os
 import ydlidar
-
 import time
 import math
-
 import csv
-
 
 ydlidar.os_init()
 ports = ydlidar.lidarPortList()
