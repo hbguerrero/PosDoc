@@ -21,9 +21,9 @@ class MinimalSubscriber(Node):
     def listener_callback(self, msg):
         #self.get_logger().info("%f" % msg.data)
                     
-        if ((msg.data > 0.4) and (msg.data < 0.5)):
+        if ((msg.data > 0.9) and (msg.data < 1.0)):
            preU = 0.0
-        elif (msg.data < 0.4):
+        elif (msg.data < 0.9):
            preU = -15.0
         else:
             preU = 15.0
