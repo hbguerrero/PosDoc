@@ -1,0 +1,7 @@
+matplotlib
+scipy
+tensorflow==2.15.0 
+tensorflow-hub 
+keras==2.15.0
+opencv-python
+icrawler
