@@ -15,7 +15,7 @@ class MinimalSubscriber(Node):
     def __init__(self):
         super().__init__('minimal_subscriber')
         self.publisher_ = self.create_publisher(Float32, 'u', 10)
-        self.subscription = self.create_subscription(Float32, 'lidar', self.listener_callback, 10)
+        self.subscription = self.create_subscription(Float32, 'lidarLeft', self.listener_callback, 10)
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
