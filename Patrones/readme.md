@@ -5,6 +5,7 @@ https://data.mendeley.com/datasets/79w2n6b4kf/1      ==>  Dataset de imagenes co
 
 
 **Instalación**
+Todo esto esta proyectado para python3.10:
 
 1. Clonar el repo: git clone https://github.com/hbguerrero/PosDoc.git
 2. Crear un ambiente-virtual de python
