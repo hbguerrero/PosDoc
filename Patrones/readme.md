@@ -14,11 +14,11 @@ Todo esto esta proyectado para python3.10:
    2.1. python -m venv patrones-venv
 
 3. Cargar el ambiente virtual de python
- 
-  3.1. source patrones-venv/bin/activate en el caso de Linux
+
+   3.1. source patrones-venv/bin/activate en el caso de Linux
 
 4. Instalar dependencias
-  
-  4.1. pip install -r requirements.txt
+
+      4.1. pip install -r requirements.txt
 
 5. Enjoy
