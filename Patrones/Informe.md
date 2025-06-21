@@ -17,7 +17,7 @@ En este trabajo se explora el uso de modelos de visión por computador preentren
 
 ### 2.1. Descripción del Dataset
 
-El conjunto de datos empleado para esta investigación proviene de la plataforma [Mendeley Data](https://data.mendeley.com/datasets/9tb7k297ff/1), titulado *Banana Leaf Disease Image Dataset*, el cual fue desarrollado con el propósito de facilitar la investigación en detección automatizada de enfermedades en hojas de plátano. El dataset incluye un total de **7.001 imágenes** de hojas categorizadas en cuatro clases:
+El conjunto de datos empleado para esta investigación proviene de la plataforma [Mendeley Data](https://data.mendeley.com/datasets/9tb7k297ff/1), titulado *Banana Leaf Disease Image Dataset*, el cual fue desarrollado con el propósito de facilitar la investigación en detección automatizada de enfermedades en hojas de plátano. El dataset incluye un total de **937 imágenes** de hojas categorizadas en cuatro clases:
 
 * **Sigatoka negra** (*Mycosphaerella fijiensis*): Enfermedad fúngica severa que produce manchas negras alargadas en las hojas y puede ocasionar necrosis parcial o total del tejido foliar.
 * **Cordana** (*Cordana musae*): Se manifiesta como manchas circulares o elípticas de color marrón oscuro con bordes bien definidos.
