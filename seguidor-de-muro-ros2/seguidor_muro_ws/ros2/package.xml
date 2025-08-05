@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>esp32_bridge</name>
+  <version>0.0.1</version>
+  <description>Bridge entre ESP32 y ROS 2 usando pyserial</description>
+  <maintainer email="henry@example.com">Henry B. Guerrero</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
+  <!-- PySerial no es parte de ROS, pero lo usamos -->
+  <exec_depend>python3-serial</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
